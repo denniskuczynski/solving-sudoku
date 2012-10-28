@@ -1,1 +1,48 @@
-TESTING
+<div class="row">
+  <div class="span12">
+  	<div class="alert alert-info">
+  		<h3>Build a Puzzle</h3>
+      <uL>
+        <li>Click on squares to set the intitial numbers</li>
+        <li>Click the 'Solve' button when ready for an answer</li>
+      </ul>
+  	</div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="span3">&nbsp;</div>
+  <div class="span6">
+  	<%= render 'shared/sudoku_grid' %>
+  </div>
+  <div class="span3">&nbsp;</div>
+</div>
+
+<div class="row">
+  <div class="span4">&nbsp;</div>
+  <div class="span4" style="text-align:center;">
+    &nbsp;<button class-"btn btn-large btn-primary">Solve</button>
+	  &nbsp;<button class-"btn" disabled="true">Clear Answer</button>
+	  &nbsp;<button class-"btn" disabled="true">Clear Puzzle</button>
+  </div>
+  <div class="span4">&nbsp;</div>
+</div>
+<hr/>
+
+<div class="row">
+  <div class="span12">
+   <div class="alert alert-info">
+  		<h3>Results</h3>
+  	</div>
+  	<table class="table">
+  		<tr>
+  			<th>Solver</th>
+  			<th>Results</th>
+  			<th>Actions</th>
+  		</tr>
+  	</table>  	
+  </div>
+<div>
+ 
+</div>

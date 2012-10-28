@@ -1,0 +1,9 @@
+<div class="sudoku_grid clearfix">
+	<% for i in 0..8 %>
+	<div id="<%="subgrid_#{i}"%>" class="sudoku_subgrid">
+		<% for j in 0..8 %>
+		  <div id="<%="box_#{i}_#{j}"%>" class="sudoku_box"></div>
+		<% end %>
+	</div>
+	<% end %>
+</div

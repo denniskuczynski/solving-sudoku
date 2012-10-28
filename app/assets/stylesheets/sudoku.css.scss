@@ -1,0 +1,22 @@
+.sudoku_grid {
+  float: left;
+  width: 450px;
+  height: 450px;
+
+  .sudoku_subgrid {
+    float: left;
+    width: 148px;
+    height: 148px;
+    border: 1px solid black;
+
+    .sudoku_box {
+      float: left;
+      width: 47px;
+      height: 47px;
+      text-align: center;
+      border: 1px solid gray;
+    }
+
+  }
+	
+}
