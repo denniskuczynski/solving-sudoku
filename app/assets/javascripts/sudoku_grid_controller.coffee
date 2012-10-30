@@ -5,6 +5,14 @@ class SudokuGridController
     this.initializeEventHandlers()
 
   initializeEventHandlers: ->
+    if $('#example_easy').length
+      $('#example_easy').click (event) =>
+        event.preventDefault()
+        this.handleExampleEasy()
+    if $('#example_hard').length
+      $('#example_hard').click (event) =>
+        event.preventDefault()
+        this.handleExampleHard()
     if $('#solve_button').length
       $('#solve_button').click (event) =>
         event.preventDefault()
@@ -26,12 +34,68 @@ class SudokuGridController
         event.preventDefault()
         this.handleShowBacktrackingResults()
 
+  handleExampleEasy: ->
+    @sudoku_grid.clear()
+    @sudoku_grid.makeMove(0, 2, 8)
+    @sudoku_grid.makeMove(0, 3, 3)
+    @sudoku_grid.makeMove(0, 6, 4)
+    @sudoku_grid.makeMove(0, 8, 2)
+    @sudoku_grid.makeMove(1, 3, 4)
+    @sudoku_grid.makeMove(1, 6, 3)
+    @sudoku_grid.makeMove(2, 0, 2)
+    @sudoku_grid.makeMove(2, 3, 6)
+    @sudoku_grid.makeMove(2, 6, 5)
+    @sudoku_grid.makeMove(2, 7, 9)
+    @sudoku_grid.makeMove(2, 8, 1)
+    @sudoku_grid.makeMove(3, 0, 6)
+    @sudoku_grid.makeMove(3, 1, 1)
+    @sudoku_grid.makeMove(3, 2, 9)
+    @sudoku_grid.makeMove(3, 5, 4)
+    @sudoku_grid.makeMove(4, 4, 9)
+    @sudoku_grid.makeMove(5, 3, 2)
+    @sudoku_grid.makeMove(5, 6, 9)
+    @sudoku_grid.makeMove(5, 7, 1)
+    @sudoku_grid.makeMove(5, 8, 5)
+    @sudoku_grid.makeMove(6, 0, 1)
+    @sudoku_grid.makeMove(6, 1, 4)
+    @sudoku_grid.makeMove(6, 2, 3)
+    @sudoku_grid.makeMove(6, 5, 7)
+    @sudoku_grid.makeMove(6, 8, 9)
+    @sudoku_grid.makeMove(7, 2, 6)
+    @sudoku_grid.makeMove(7, 5, 3)
+    @sudoku_grid.makeMove(8, 0, 9)
+    @sudoku_grid.makeMove(8, 2, 2)
+    @sudoku_grid.makeMove(8, 5, 5)
+    @sudoku_grid.makeMove(8, 6, 8)
+    this.displayGrid(@sudoku_grid)
+
+  handleExampleHard: ->
+    @sudoku_grid.clear()
+    @sudoku_grid.makeMove(0, 7, 1)
+    @sudoku_grid.makeMove(0, 8, 2)
+    @sudoku_grid.makeMove(1, 4, 3)
+    @sudoku_grid.makeMove(1, 5, 5)
+    @sudoku_grid.makeMove(2, 3, 6)
+    @sudoku_grid.makeMove(2, 7, 7)
+    @sudoku_grid.makeMove(3, 0, 7)
+    @sudoku_grid.makeMove(3, 6, 3)
+    @sudoku_grid.makeMove(4, 3, 4)
+    @sudoku_grid.makeMove(4, 6, 8)
+    @sudoku_grid.makeMove(5, 0, 1)
+    @sudoku_grid.makeMove(6, 3, 1)
+    @sudoku_grid.makeMove(6, 4, 2)
+    @sudoku_grid.makeMove(7, 1, 8)
+    @sudoku_grid.makeMove(7, 7, 4)
+    @sudoku_grid.makeMove(8, 1, 5)
+    @sudoku_grid.makeMove(8, 6, 6)
+    this.displayGrid(@sudoku_grid)
+
   handleSolveButton: ->
     $('#solve_modal').modal({keyboard: false, show: true})
     $('#results_table').html('<tr><th>Solver</th><th>Results</th><th>Actions</th></tr>')
     
     # Solve Puzzle / Show Results
-    setTimeout(this.solveWithBacktracking, 100)
+    setTimeout(this.solveWithBacktracking, 1000)
 
   solveWithBacktracking: =>
     @backtracking_solver = new window.BacktrackingSolver(@sudoku_grid.copy())
