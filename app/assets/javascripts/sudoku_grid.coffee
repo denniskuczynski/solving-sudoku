@@ -1,55 +1,72 @@
 class SudokuGrid
-	constructor: ->
-		# Initialize the Grid State
-		@subgrids = []
-		for i in [0..8]
-			@subgrids[i] = []
-			for j in [0..8]
-				@subgrids[i][j] = 0
+  constructor: ->
+    # Initialize the Grid State
+    @rows = []
+    for i in [0..8]
+      @rows[i] = []
+      for j in [0..8]
+        @rows[i][j] = 0
 
-	possibleMoves: (subgrid, box) ->
-		return []
+    # Initlaize Grid Lookup Table
+    @G1 = [[0..2], [0..2]]
+    @G2 = [[0..2], [3..5]]
+    @G3 = [[0..2], [6..8]]
+    @G4 = [[3..5], [0..2]]
+    @G5 = [[3..5], [3..5]]
+    @G6 = [[3..5], [6..8]]
+    @G7 = [[6..8], [0..2]]
+    @G8 = [[6..8], [3..5]]
+    @G9 = [[6..8], [6..8]]
+    @subgrids = [
+      [@G1, @G1, @G1, @G2, @G2, @G2, @G3, @G3, @G3],
+      [@G1, @G1, @G1, @G2, @G2, @G2, @G3, @G3, @G3],
+      [@G1, @G1, @G1, @G2, @G2, @G2, @G3, @G3, @G3],
+      [@G4, @G4, @G4, @G5, @G5, @G5, @G6, @G6, @G6],
+      [@G4, @G4, @G4, @G5, @G5, @G5, @G6, @G6, @G6],
+      [@G4, @G4, @G4, @G5, @G5, @G5, @G6, @G6, @G6],
+      [@G7, @G7, @G7, @G8, @G8, @G8, @G9, @G9, @G9],
+      [@G7, @G7, @G7, @G8, @G8, @G8, @G9, @G9, @G9],
+      [@G7, @G7, @G7, @G8, @G8, @G8, @G9, @G9, @G9]]
 
-    # Find current_move string in integer array of possible_moves
-	find_current_move: (current_move, possible_moves) ->
-	    if (current_move == undefined)
-	    	return -1
-	    else
-	        for i in [0..possible_moves.length-1]
-	        	if possible_moves[i] == parseInt(current_move)
-	        		return i
-	        return -1
+  getMove: (row, col) ->
+    @rows[row][col]
 
-# On Ready
-$ ->
-  window.sudoku_grid = new SudokuGrid()
+  makeMove: (row, col, value) ->
+    @rows[row][col] = value
 
-  if $('#solve_button').length
-  	$('#solve_button').click (event) ->
-  		event.preventDefault()
+  clear: ->
+    for i in [0..8]
+      for j in [0..8]
+        this.makeMove(i, j, 0)
 
-  if $('#clear_answer_button').length
-  	$('#clear_answer_button').click (event) ->
-  		event.preventDefault()
+  copy: ->
+    new_grid = new SudokuGrid()
+    for i in [0..8]
+      for j in [0..8]
+        new_grid.makeMove(i, j, this.getMove(i, j))
+    new_grid
 
-  if $('#clear_puzzle_button').length
-  	$('#clear_puzzle_button').click (event) ->
-  		event.preventDefault()
+  possibleMoves: (row, col) ->
+    choices = []
+    for i in [0..9]
+      choices[i] = true
+    # Check Row
+    for val in @rows[row]
+      choices[val] = false
+    # Check Column
+    for row_val in @rows
+      choices[row_val[col]] = false
+    # Check Subgrid
+    subgrid = @subgrids[row][col]
+    for i in subgrid[0]
+      for j in subgrid[1]
+        choices[@rows[i][j]] = false
+    # Create array os possible moves from remaining choices
+    possible = []
+    for i in [1..9]
+      if choices[i]
+        possible.push i
+    possible
 
-  if $('#sudoku_grid').length
-    $('#sudoku_grid').on 'click', '.sudoku_box', (event) ->
-    	box_ids = this.id.split('_')
-    	subgrid = box_ids[1]
-    	box = box_ids[2]
-
-    	possible_moves = window.sudoku_grid.possibleMoves(subgrid, box)
-    	if possible_moves.length == 0
-    		this.innerHTML = ''
-    	else
-    	    current_index = window.sudoku_grid.find_current_move(this.innerHTML, possible_moves)
-    	    if (current_index == -1)
-    	    	this.innerHTML = possible_moves[0]
-    	    else if (current_index == possible_moves.length-1)
-    	    	this.innerHTML = ''
-    	    else
-    	    	this.innerHTML = possible_moves[current_index+1]
+# Put in Global Namespace
+window.SudokuGrid = SudokuGrid

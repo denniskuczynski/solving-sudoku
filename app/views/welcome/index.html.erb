@@ -24,8 +24,8 @@
   <div class="span3">&nbsp;</div>
   <div class="span6" style="text-align:center;">
     <a id="solve_button" href="#" class="btn btn-large btn-primary">Solve</a>
-	  <a id="clear_answer_button"  href="#" class="btn btn-large" disabled="true">Clear Answer</a>
-	  <a id="clear_puzzle_button"  href="#" class="btn btn-large" disabled="true">Clear Puzzle</a>
+	  <a id="clear_answer_button"  href="#" class="btn btn-large">Clear Answer</a>
+	  <a id="clear_puzzle_button"  href="#" class="btn btn-large">Clear Puzzle</a>
   </div>
   <div class="span3">&nbsp;</div>
 </div>
@@ -36,14 +36,23 @@
    <div class="alert alert-info">
   		<h3>Results</h3>
   	</div>
-  	<table class="table">
-  		<tr>
-  			<th>Solver</th>
-  			<th>Results</th>
-  			<th>Actions</th>
-  		</tr>
+  	<table id="results_table" class="table">
   	</table>  	
   </div>
 <div>
  
+</div>
+
+
+<div id="solve_modal" class="modal hide fade">
+  <div class="modal-header">
+    <h3>Solving Sudoku</h3>
+  </div>
+  <div class="modal-body">
+    <div class="progress progress-striped active">
+      <div class="bar" style="width: 100%;"></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+  </div>
 </div>
