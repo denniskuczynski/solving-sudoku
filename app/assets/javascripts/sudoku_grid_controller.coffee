@@ -2,6 +2,7 @@ class SudokuGridController
   constructor: (sudoku_grid) ->
     @sudoku_grid = sudoku_grid
     @backtracking_solver = null
+    @backtracking_most_constrained_solver = null
     this.initializeEventHandlers()
 
   initializeEventHandlers: ->
@@ -33,6 +34,9 @@ class SudokuGridController
       $('#results_table').on 'click', '#show_backtracking', (event) =>
         event.preventDefault()
         this.handleShowBacktrackingResults()
+      $('#results_table').on 'click', '#show_backtracking_most_constrained', (event) =>
+        event.preventDefault()
+        this.handleShowBacktrackingMostConstrainedResults()
 
   handleExampleEasy: ->
     @sudoku_grid.clear()
@@ -93,8 +97,7 @@ class SudokuGridController
   handleSolveButton: ->
     $('#solve_modal').modal({keyboard: false, show: true})
     $('#results_table').html('<tr><th>Solver</th><th>Results</th><th>Actions</th></tr>')
-    
-    # Solve Puzzle / Show Results
+    # Solve Puzzle with Backtracking
     setTimeout(this.solveWithBacktracking, 1000)
 
   solveWithBacktracking: =>
@@ -103,8 +106,18 @@ class SudokuGridController
     @backtracking_solver.solve()
     stop = new Date()
     backtracking_results_button = '<button id="show_backtracking" class="btn btn-large">Show Answer</button>'
-    this.appendSolverResults('BacktrackingSolver', "#{(stop-start)/1000} seconds", backtracking_results_button)
-    
+    this.appendSolverResults('Backtracking (First Square)', "#{(stop-start)/1000} seconds", backtracking_results_button)
+    # Solve Puzzle with Backtracking (Most Constrained)
+    setTimeout(this.solveWithBacktrackingMostConstrained, 1000)
+
+  solveWithBacktrackingMostConstrained: =>
+    @backtracking_most_constrained_solver = new window.BacktrackingMostConstrainedSolver(@sudoku_grid.copy())
+    start = new Date()
+    @backtracking_most_constrained_solver.solve()
+    stop = new Date()
+    backtracking_results_button = '<button id="show_backtracking_most_constrained" class="btn btn-large">Show Answer</button>'
+    this.appendSolverResults('Backtracking (Most Constrained Square)', "#{(stop-start)/1000} seconds", backtracking_results_button)
+    # Show Results
     $('#solve_modal').modal('hide')
 
   appendSolverResults: (name, results, button) ->
@@ -122,6 +135,10 @@ class SudokuGridController
   handleShowBacktrackingResults: ->
     if @backtracking_solver
       this.displayGrid(@backtracking_solver.getGrid())
+
+  handleShowBacktrackingMostConstrainedResults: ->
+    if @backtracking_most_constrained_solver
+      this.displayGrid(@backtracking_most_constrained_solver.getGrid())
 
   handleGridBox: (box_div) ->
     box_ids = box_div.id.split('_')
