@@ -1,34 +1,31 @@
 class BacktrackingMostConstrainedSolver
-  constructor: (sudoku_grid) ->
+
+  solve: (sudoku_grid) ->
     @sudoku_grid = sudoku_grid
-
-  getGrid: ->
-    @sudoku_grid
-
-  solve: ->
+    @guesses = 0
+    start = new Date()
     try
       this.advance_guess()
     catch error
       console.log error
-    true
+    stop = new Date()
+    "Found solution in #{@guesses} guesses, #{(stop-start)/1000} seconds"
 
   advance_guess: ->
     open_square_list = this.open_squares()
-    #console.log "Open Squares: #{open_square_list.length}"
     if open_square_list.length == 0
       throw "Finished Solution"
     else
       most_constrained_list = this.sort_most_constrained(open_square_list)
-      square = most_constrained_list[0] # Select Most Constrained Square
-      row = square[0]
-      col = square[1]
+      most_constrained_square = most_constrained_list[0]
+      row = most_constrained_square[0]
+      col = most_constrained_square[1]
       possible_moves = @sudoku_grid.possibleMoves(row, col)
       _.each possible_moves, (move) =>
-        #console.log "Trying #{move} at #{row}, #{col}"
         @sudoku_grid.makeMove(row, col, move)
+        @guesses = @guesses + 1
         this.advance_guess()
       # No Move
-      #console.log "No move at #{row}, #{col}"
       @sudoku_grid.makeMove(row, col, 0)
 
   open_squares: ->
